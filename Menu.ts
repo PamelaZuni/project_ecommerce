@@ -1,4 +1,6 @@
 import readlinesync = require("readline-sync");
+import { colors } from "./src/util/Colors";
+
 
 let resume = true;
 
@@ -27,25 +29,37 @@ while (resume) {
 
   switch (option) {
     case 0:
-        console.log("\n Harper & Steve - Where Style Meets Quality!",);
+        console.log(colors.fg.gray,"\n Harper & Steve - Where Style Meets Quality!",
+        colors.reset
+        );
         resume = false;
       break;
 
     case 1:
-        console.log("\n\nList all products\n\n");
+        console.log(
+          colors.fg.whitestrong,
+          "\n\nList all products\n\n",
+          colors.reset
+        );
 
       break;
 
     case 2:
         console.log(
-          "\n\nList Product by ID\n\n");
+          colors.fg.whitestrong,
+          "\n\nList Product by ID\n\n",
+          colors.reset
+        );
         id = readlinesync.questionInt("Enter the Product ID: ");
    
       break;
 
     case 3:
         console.log(
-          "\n\nRegister Product\n\n");
+          colors.fg.whitestrong,
+          "\n\nRegister Product\n\n",
+          colors.reset
+        );
         name = readlinesync.question("Enter the name of the Product: ");
         type = readlinesync.keyInSelect(productType, "", { cancel: false }) + 1;
         price = readlinesync.questionFloat("Enter the price: ");
@@ -65,19 +79,27 @@ while (resume) {
       break;
 
     case 4:
-        console.log("\n\nUpdate Product\n\n",);
+        console.log(
+          colors.fg.whitestrong,
+          "\n\nUpdate Product\n\n",
+          colors.reset
+        );
         id = readlinesync.questionInt("Enter the Product ID: ");
 
       break;
 
     case 5:
-        console.log("\n\nDelete Product\n\n");
+        console.log(colors.fg.whitestrong,"\n\nDelete Product\n\n", colors.reset);
         id = readlinesync.questionInt("Enter the Product ID: ");
       
       break;
 
     default:
-        console.log("Choose a valid option");
+        console.log(
+          colors.fg.whitestrong,
+          "Choose a valid option",
+          colors.reset
+        );
    
       break;
  }

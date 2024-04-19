@@ -1,6 +1,8 @@
 import readlinesync = require("readline-sync");
 import { colors } from "./src/util/Colors";
-
+import { ProductController } from "./src/controller/ProductController";
+import { Jewelry } from "./src/model/Jewelry";
+import { Bag } from "./src/model/Bag";
 
 let resume = true;
 
@@ -8,8 +10,19 @@ let option, id, type, price: number;
 let name, material, typeLeather : string;
 let  productType = ["Jewelry", "Bag"];
 
+const productController: ProductController = new ProductController();
+
+productController.registerProduct(
+  new Jewelry(productController.gerarId(), "Zendaya", 1, 1200, "Platinum"),
+);
+
+productController.registerProduct(
+  new Bag(productController.gerarId(), "Lowe", 2, 599, "Vegan"),
+);
+
 while (resume) {
-  console.log("*****************************************************");
+  console.log(colors.bg.gray, colors.fg.magenta,
+              "*****************************************************");
   console.log("                Harper & Steve                       ");
   console.log("         Where Style Meets Quality!                  ");
   console.log("                                                     ");
@@ -23,6 +36,8 @@ while (resume) {
   console.log("            0 - Exit                                 ");
   console.log("                                                     ");
   console.log("*****************************************************");
+  console.log("                                                     ",
+  colors.reset);
 
   console.log("Enter the desired option: ");
   option = readlinesync.questionInt("");
@@ -41,6 +56,8 @@ while (resume) {
           "\n\nList all products\n\n",
           colors.reset
         );
+        productController.listAllProducts();
+        keyPress();
 
       break;
 
@@ -51,6 +68,8 @@ while (resume) {
           colors.reset
         );
         id = readlinesync.questionInt("Enter the Product ID: ");
+        productController.listProductbyID(id);
+        keyPress();
    
       break;
 
@@ -67,14 +86,23 @@ while (resume) {
         switch (type) {
             case 1:
                 let material = readlinesync.question("Enter the material of the Jewelry: ");
+                productController.registerProduct(
+                  new Jewelry(
+                    productController.gerarId(),name, type, price, material,
+                  ),
+                )
           
               break;
 
             case 2:
                 let leatherType = readlinesync.question("Enter the leather type of the Bag: ");
+                productController.registerProduct(
+                  new Bag(productController.gerarId(), name, type, price, leatherType),
+                );
               
               break;
         }
+        keyPress();
 
       break;
 
@@ -86,12 +114,40 @@ while (resume) {
         );
         id = readlinesync.questionInt("Enter the Product ID: ");
 
-      break;
+        let product = productController.findInArray(id);
+
+            if (product !== null) {
+              name = readlinesync.question("Digit the Product Name: ");
+              type = product.type;
+              price = readlinesync.questionFloat("Digit the price: ");
+
+              switch (type) {
+                case 1:
+                  let material = readlinesync.question(
+                    "Digit the Jewelry material: ",
+                  );
+                  productController.updateProduct(
+                    new Jewelry(id, name, type, price, material),
+                  );
+                  break;
+                case 2:
+                  let leatherType = readlinesync.question("Digit the leather of the Bag: ");
+                  productController.updateProduct(
+                    new Bag(id, name, type, price, leatherType),
+                  );
+                  break;
+              }
+            } else console.log("Product was not found!");
+
+            keyPress();
+            break;
 
     case 5:
         console.log(colors.fg.whitestrong,"\n\nDelete Product\n\n", colors.reset);
         id = readlinesync.questionInt("Enter the Product ID: ");
+        productController.deleteProduct(id);
       
+      keyPress();
       break;
 
     default:
@@ -102,7 +158,7 @@ while (resume) {
         );
    
       break;
- }
+  }
 }
 
 function sobre(): void {
@@ -112,5 +168,12 @@ console.log("Generation Brasil");
 console.log("github.com/pamelazunii");
 console.log("*****************************************************");
 }
+
+function keyPress(): void {
+  console.log(colors.reset, "");
+  console.log("\nPress enter to continue...");
+  readlinesync.prompt();
+}
+
 
 
